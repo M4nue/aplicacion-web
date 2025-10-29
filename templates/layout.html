@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FlaskTODO</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    header { margin-bottom: 20px; }
+    .messages { color: darkred; list-style: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FlaskTODO</h1>
+    {% if session.get('usuario') %}
+      <p>
+        Bienvenido, <b>{{ session['usuario'] }}</b> ({{ session['rol'] }}) |
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+      </p>
+    {% endif %}
+    <hr>
+  </header>
+
+  {% block content %}{% endblock %}
+</body>
+</html>

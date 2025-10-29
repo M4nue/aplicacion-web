@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <h2>Buscador</h2>
+  <form method="get">
+    <input type="text" name="nombre" placeholder="Nombre" value="{{ request.args.get('nombre', '') }}">
+    <input type="text" name="edad" placeholder="Edad" value="{{ request.args.get('edad', '') }}">
+    <input type="text" name="localidad" placeholder="Localidad" value="{{ request.args.get('localidad', '') }}">
+    <button type="submit">Buscar</button>
+  </form>
+
+  <hr>
+
+  {% if rol == 'admin' %}
+  <h2>Insertar nuevo registro</h2>
+  <form method="POST">
+    <label>Usuario:</label>
+    <input type="text" name="user" required><br>
+    <label>Edad:</label>
+    <input type="number" name="edad" required><br>
+    <label>Localidad:</label>
+    <input type="text" name="localidad" required><br>
+    <button type="submit">Guardar</button>
+  </form>
+  <hr>
+  {% endif %}
+
+  <h2>Registros</h2>
+
+  {% if coleccion|length == 0 %}
+    <p><i>No se encontraron resultados.</i></p>
+  {% endif %}
+
+  {% for doc in coleccion %}
+    <div class="documento" style="margin-bottom: 10px; background-color: #f3f3f3; padding: 10px;">
+      <p><b>Usuario:</b> {{ doc['nombre'] }}</p>
+      <p><b>Edad:</b> {{ doc['edad'] }}</p>
+      <p><b>Localidad:</b> {{ doc['localidad'] }}</p>
+
+      {% if rol == 'admin' %}
+        <a href="{{ url_for('delete', id=doc['_id']) }}" onclick="return confirm('¿Eliminar este registro?')">Eliminar</a>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endblock %}
